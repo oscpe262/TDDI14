@@ -1,0 +1,173 @@
+TDDI14 Objektorienterad programming, 2014-05-28, Kommentarer till uppgifterna.
+------------------------------------------------------------------------------
+Används som rättningsmall.
+
+------------------------------------------------------------------------------
+
+Inparametrar av komplicerad typ (t.ex. string) ska deklareras referens till
+konstant (const&).
+
+1. Washing_Equipment
+   -----------------
+   - En abstrakt klass kräver minst en "pure virtual" funktion, copy() är den
+     naturliga kandidaten.
+   - Konstruktor som tar modell och energiklass bör vara protected för att 
+     framhäva abstraktheten.
+   - Defaultkonstruktor genereras inte eftersom annan konstruktor deklareras,
+     deklarera inget.
+   - Kopieringskonstruktorn ska vara protected, kan "defaultas".
+   - Flyttkonstruktor kan defaultas protected, om man tycker att den kan finnas.
+   - Virtuell destruktor måste deklareras, kan "defaultas".
+   - Kopieringstilldelningsoperatorn ska "deletas".
+   - Flyttilldelning ska inte finnas och genereras inte; deklarera inget.
+   - copy() ska returnera Washing_Equipment*, vara "pure virtual" och const.
+   - get_model() ska returnera string; ska vara const; inte virtual.
+   - get_energy_class() ska returnera string; ska vara const; inte virtual.
+   - Datamedlem för modell, ska vara private och const.
+   - Datamedlem för energiklass, ska vara private och const.
+
+   Washing_Machine
+   ---------------
+   - Washing_Equipment ska vara public basklass.
+   - Konstruktor som tar modell, energiklass, kapacitet och varvtal ska vara
+     public, ska vidarebefordra modell och energiklass till konstruktor för
+     Washing_Equipment.
+   - Defaultkonstruktor genereras inte eftersom annan konstruktor deklareras,
+     deklarera inte.
+   - Kopieringskonstruktorn ska vara protected, kan "defaultas".
+   - Flyttkonstruktor kan defaultas protected, om man tycker att den kan finnas.
+   - Kompilatorgenererad destruktor är bra (blir virtuell), "defaulta".
+   - Kopieringstilldelningsoperatorn ska "deletas".
+   - Flyttilldelning ska inte finnas och genereras inte; deklarera inte.
+   - copy() ska överskuggas, markera med 'override', kan returnera Washing_Machine*,
+     ska använda kopieringskonstruktorn för att initiera kopian.
+   - get_capacity() ska returnera kapaciteten; ska vara const; inte virtual.
+   - get_spin() ska returnera varvtalet; ska vara const; inte virtual.
+   - Datamedlem för kapacitet; ska vara privat och const.
+   - Datamedlem för varvtal; ska vara privat och const.
+
+   Clothes_Dryer
+   -------------
+   - Washing_Equipment ska vara public basklass.
+   - Ska vara abstrakt.
+   - Konstruktor som tar modell och energiklass bör vara protected för att 
+     framhäva abstraktheten, ska vidarebefordra modell och energiklass till 
+     konstruktor för Washing_Equipment.
+   - Defaultkonstruktor genereras inte eftersom annan konstruktor deklareras,
+     deklarera inte.
+   - Kopieringskonstruktorn ska vara protected, kan "defaultas".
+   - Flyttkonstruktor kan defaultas protected, om man tycker att den kan finnas.
+   - Kompilatorgenererad destruktor är bra (blir virtuell), "defaulta".
+   - Kopieringstilldelningsoperatorn ska "deletas".
+   - Flyttilldelning ska inte finnas och genereras inte; deklarera inte.
+   - copy() ska inte överskuggas, ärv som "pure" vilket gör Clothes_Dryer abstrakt.
+   - Inga andra medlemsfunktioner ska finnas.
+   - Inga specifika datamedlemmar ska deklareras.
+
+   Condenser_Dryer
+   ---------------
+   - Clothes_Dryer ska vara public basklass.
+   - Konstruktor som tar modell, energiklass och kapacitet ska vidarebefordra 
+     modell och energiklass till konstruktor för Clothes_Dryer.
+   - copy() ska överskuggas, markera med 'override', kan returnera Condenser_Dryer*,
+     ska använda kopieringskonstruktorn för att initiera kopian.
+   - get_capacity() ska returnera kapaciteten, ska vara const; inte virtual.
+   - Datamedlem för kapacitet; ska vara privat och const.
+   - Speciella medlemsfunktioner deklareras enligt Clothes_Dryer.
+
+   Tumble_Dryer
+   ------------
+   - Clothes_Dryer ska vara public basklass.
+   Inga specifika datamedlemmar och tillhörande medlemsfunktioner.
+   För övrigt analogt med Condenser_Dryer.
+
+   Dish_Washer
+   -----------
+   - Washing_Equipment ska vara public basklass.
+   - get_capacity() ska returnera kapacitet, ska vara const; inte virtual.
+   - get_noise_level ska returnera ljudnivå, ska vara const; inte virtual.
+   - Datamedlem för kapacitet ska vara private och const.
+   - Datamedlem för ljudnivå ska vara private och const.
+   För övrigt analogt med Washing_Machine.
+
+   print(const Washing_Equipment* p)
+   --------------------
+   - Ska skapa en kopia av objektet som p pekar på med copy() och lagra den
+     returnerade pekaren i en lokal variabel av typ Washing_Equipment*.
+   - Använd typeid/dynamic_cast för att kontrollera objektets dynamiska typ
+     och möjliggöra anrop av klasspecifika medlemsfunktioner.
+   - Gör delete på pekaren till kopian.
+
+   main()
+   ------
+   Deklarera en pekare av varje av Washing_Machine*, Condenser_Dryer*,
+   Tumble_Dryer* och Dish_Washer* och skapa motsvarande objekt med new
+   och initiera respektive pekare.
+   Anropa print() för var och en av pekarna.
+   Gör delete på varje pekare.
+
+------------------------------------------------------------------------------
+
+2. Step
+   ----
+   Modifiera enligt detta: enum Step { One = 1, Two, Three };
+
+   Prefix operator++
+   -----------------
+   - ska ha parameter av typ Step&
+   - ska returnera Step& (lvalue)
+   - om parametern är mindre än Three ska dess värde stegas upp, annars inte.
+   - ska returnera parametern
+
+   Postfix operator++
+   ------------------
+   - ska ha en första parameter av typ Step&
+   - ska ha en andra parameter en av typ int; deklarera inget namn
+   - ska returnera Step (rvalue)
+   - ska skapa en kopia av parametern
+   - ska anropa prefix ++ för att (eventuellt) stega upp parametern
+   - ska returnera kopian
+
+   Prefix operator--
+   -----------------
+   - ska ha parameter av typ Step&
+   - ska returnera Step&
+   - om parametern är större än One ska dess värde stegas ner, annars inte.
+   - ska returnera parametern
+
+   Postfix operator-
+   ------------------
+   - ska ha en första parameter av typ Step&
+   - ska ha en andra parameter en av typ int; deklarera inget namn
+   - ska returnera Step
+   - ska skapa en kopia av parametern
+   - ska anropa prefix -- för att (eventuellt) stega ner parametern
+   - ska returnera kopian
+
+   Testprogram
+   -----------
+   Givet, inga modifieringar ska göras.
+
+------------------------------------------------------------------------------
+
+3. Real
+   ----
+   - ska vara en klassmall med en typparameter (T) och en icke-typparameter 
+     (Precision) av typ int med defaultargument 6.
+   - ska ha en datamedlem av typ T.
+   - ska ha konstruktor som tar 'const T&' och initierar datamedlemmen; bör
+     vara explicit.
+   - Kopieringskonstruktor ska finnas och kan genereras, "defaulta".
+   - Destruktor ska finnas och kan genereras, "defaulta".
+   - Kopieringstilldelningsoperator ska finnas och kan genereras, "defaulta".
+   - defaultkonstruktor ska inte finnas, genereras inte, ska inte "defaultas".
+   - Inget behov av flyttsemantik; flyttkonstruktor och flytttilldelningsoperator
+     genereras inte, ska inte "defaultas".
+   - str() ska returnera string, ska vara const; använd ostringstream för att
+     implementera.
+
+   Testprogram
+   -----------
+   Givet, inga modifieringar ska göras.
+
+------------------------------------------------------------------------------

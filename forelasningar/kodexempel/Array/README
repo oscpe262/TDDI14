@@ -1,0 +1,8 @@
+Array, version Enkel.
+------------------------------------------------------------------------
+Mallklassen Array motsvarar std::array i nya standarden, men utan de
+nästlade typerna och iteratorer. Egentligen borde alla funktioner
+definieras i h-filen - uppdelning mellan h-fil och tcc-fil görs enbart
+för att demonstrera hur man hanterar mallkod (GCC) när man vill göra
+uppdelning mellan inkluderingsfil och implementeringsfil.
+------------------------------------------------------------------------

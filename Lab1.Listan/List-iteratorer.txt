@@ -1,0 +1,35 @@
+Givet kodskelett för List-iteratorerna
+------------------------------------------------------------------------------
+
+   template<typename T>
+   struct List_iterator_
+   {
+      alias value_type = T;
+      alias pointer = T*;
+      alias reference = T&;
+      alias difference_type = std::ptrdiff_t;
+      alias iterator_category = std::forward_iterator_tag;
+
+      // Defaultkonstruktor som sätter iteratorn till "förbi-sista"
+      // Konstruktor för att initiera med en pekare till en listnod
+      // operator* ska returnera en referens till elementet i noden
+      // operator-> ska returnera en pekare till elementet i noden
+      // operator++ i både prefix- och postfix-version för att stega iteratorn
+      // operator== för att kontrollera om två iteratorer är lika, eller inte
+      // operator!= för att kontrollera om två iteratorer är olika, eller inte
+      // Pekare till listnod, representationen för iteratorn
+   };
+
+Motsvarande för List_const_iterator_, men där det inte ska gå att modifiera det 
+element som iteratorn pekar på. Ändra definitionerna för pointer och reference
+för att avspegla detta. 
+
+List_const_iterator ska ha en konstruktor som typomvandlar från List_iterator_
+(List::iterator) till List_const_iterator_ (List::const_iterator).
+
+Det avslutande understrykningstecknet i namnen används för att markera att 
+detta är en implementeringsklasser som användaren inte ska veta (bry sig) om,
+även om de medföljer i List.h. Detsamma gäller även List_Node, som ska 
+definieras före List_iterator_ och List_const_iterator_.
+
+------------------------------------------------------------------------------

@@ -1,0 +1,7 @@
+Föreläsningsexempel - Polymorf lista
+------------------------------------------------------------------------------
+Enkellänkad lista med polymorfa listnoder. De två konkreta listnodtyperna
+Data_Node och Null_Node är härledda från en gemensam basklass List_Node.
+Operationerna på listnoderna är implementerade med polymorfa operationer
+som har implementerats rekursivt i tillämpliga fall.
+------------------------------------------------------------------------------

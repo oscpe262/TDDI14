@@ -1,0 +1,56 @@
+TDDI14 Objektorienterad programmering, laboration Kalkylatorn, Expression
+------------------------------------------------------------------------------
+I denna mapp finns programskelett och testprogram för klassen Expression och
+klasshierarkin Expression_Tree.
+
+Kompilera med:
+
+   g++ -std=c++11 -L/sw/gcc-${GCC4_V}/lib -static-libstdc++
+
+Det smidigaste är att definiera ett alias, vilket görs med följande kommano
+(lämpligtvis placerat i den startfil som läses då du loggar in, t.ex. ~/.cshrc):
+
+   alias g++ "g++ -std=c++11 -L/sw/gcc-${GCC4_V}/lib -static-libstdc++"
+
+Kompileringsflaggor som dessutom starkt rekommenderas är följande och vid
+kompilering för avlusning ska -g användas: -pedantic -Wall -Wextra.
+
+Expression
+----------
+För klassen Expression är filerna Expression.h och Expression.cc givna. Ett
+skelett för klassen Expression är givet och detta ska vidareutvecklas för
+att Expression ska bli en väl fungerande klass för sitt syfte. Expression_Tree
+ska användas för att internt representera ett uttryck.
+
+Expression.h          Inkluderingsfil för klassen Expression.
+
+Expression.cc         Implementeringsfil för klassen Expression. Det finns
+		      			       stubbar för medlemsfunktioner som ska ersättas/modifieras.
+
+expression-test.cc    Testprogram för klassen Expression.
+
+Kompilering (flaggorna nämnda ovan bör/måste användas):
+
+   g++ expression-test.cc Expression.cc Expression_Tree.cc
+
+
+Expression_Tree
+---------------
+För Expression_Tree-klasserna är filerna Expression_Tree.h och Expression_Tree.cc
+givna, med rudimentärt innehåll. Det finns ett skelett för varje klass som, enligt
+laborationshandleningen, ska ingå.
+
+Expression_Tree.h          Inkluderingsfil för Expression_Tree-klasserna.
+
+Expression_Tree.cc         Implementeringsfil för Expression_Tree-klasserna.
+
+expression_tree-test.cc    Testprogram för Expression_Tree-klasserna.
+
+Konstruktion av dessa klasser är en av huvuduppgifterna i laborationen, tänk
+noga igenom hur hierarkin och respektive klass bör konstrueras!
+
+Kompilering (flaggorna nämnda ovan bör/måste användas):
+
+   g++ expression_tree-test.cc Expression_Tree.cc
+
+------------------------------------------------------------------------------

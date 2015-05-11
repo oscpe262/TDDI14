@@ -1,0 +1,158 @@
+TDDI14 Objektorienterad programmering, 2014-10-21, Kommentarer
+-----------------------------------------------------------------------
+
+1. Inparametrar av typ std::string ska ha typen 'const string&'.
+
+   Grill
+   -----
+   - Abstrakthet kräver minst en "pure virtual" funktion. Om ingen vanlig
+     medlemsfunktion lämplig för detta finns används destruktorn; den måste
+     då ha en separat definition.
+   - Konstruktor som tar modell bör vara protected, för att framhäva abstraktheten;
+     en konstruktor som kan anropas med ett argument bör vara explicit.
+   - Kopieringskonstruktorn ska "deletas".
+   - Flyttkonstruktorn ska inte deklareras.
+   - Måste ha en virtuell destruktor (bör vara "pure" i detta fall).
+   - Kopieringstilldelningsoperatorn ska "deletas".
+   - Flyttilldelningsoperatorn ska inte deklareras.
+   - get_model() ska returnera std::string, vara const, ej virtual.
+   - Datamedlem för modell, ska vara private och const.
+
+   Grill_Charcoal
+   --------------
+   - Grill ska vara public basklass.
+   - Publik konstruktor som tar modell, bör vara explicit.
+   - Kopieringskonstruktorn ska "deletas".
+   - Flyttkonstruktorn ska inte deklareras.
+   - Destruktorn ska defaultas.
+   - Kopieringstilldelningsoperatorn ska "deletas".
+   - Flyttilldelningsoperatorn ska inte deklareras.
+   - Inga andra medlemsfunktioner ska deklareras.
+   - Inga egna datamedlemmar ska deklareras.
+
+   Grill_LPG
+   ---------
+   - Grill ska vara public basklass.
+   - Kopieringskonstruktorn ska "deletas".
+   - Flyttkonstruktorn ska inte deklareras.
+   - Destruktorn ska defaultas.
+   - Kopieringstilldelningsoperatorn ska "deletas".
+   - Flyttilldelningsoperatorn ska inte deklareras.
+   - Publik(a) konstruktor(er) som tar modell, antal brännare och gastyp (default
+     "Propan"); modell vidarebefordras till Grill-konstruktor, medlemsinitierare
+     för  brännare och gastyp.
+   - get-funktion för antal brännare ska returnera int, vara const, ej virtual.
+   - get-funktion för gastyp ska returnera std::string, vara const, ej virtual.
+   - Datamedlemm för antal brännare.
+   - Datamedlemm för antal gastyp (default "Propan").
+
+   Grill_LPG_Sideburner
+   ------------------
+   - Grill_LPG ska vara public basklass.
+   - Publik(a) konstruktor(er) som tar modell antal brännare och gastyp (default
+     "Propan"); alla parametrar vidarebefordras till Grill_LPG-konstruktor.
+   - Kopieringskonstruktorn ska "deletas".
+   - Flyttkonstruktorn ska inte deklareras.
+   - Destruktorn ska defaultas.
+   - Kopieringstilldelningsoperatorn ska "deletas".
+   - Flyttilldelningsoperatorn ska inte deklareras.
+   - Inga andra medlemsfunktioner ska deklareras.
+   - Inga egna datamedlemmar ska deklareras.
+
+   Testprogram
+   -----------
+   Skapa ettr dynamisk objekt av respektive konkret klass, Grill_Charcoal,
+   Grill_LPG och Grill_LPG_Sideburner och lagra pekarna i vectorn.
+   Iterera över vectorn pch anropa print() för varje pekare/objekt, gör
+   delete på pekaren och sätt sedan pekaren till nullptr så att det sker
+   i vectorn!
+
+   print()
+   -------
+   Använd exempelvis typeid-uttryck för att identifiera typen hos objektet p
+   pekar på och dynamic_cast för att typomvandla p, så att subklasspecifika
+   medlemsfunktioner kan anropas.
+   
+------------------------------------------------------------------------------
+
+2.  Adder
+    -----
+    - ska vara klassmall med en malltypparameter (T).
+    - ska ha en konstruktor som tar ett värde av typen T och initierar value_
+      med detta värde; defaultargument T{} eller T() (den givna konstruktorn 
+      mallifierad); exlicit eller ej, beroende på lösningen.
+    Speciella medlemsfunktioner (alla ska finnas): 
+    - defaultkonstruktorn erhålls genom den givna konstruktorn då default-
+      argument utnyttjas.
+    - kopieringskonstruktorn ska defaultas.
+    - flyttkonstruktorn ska defaultas.
+    - destruktorn ska defaultas.
+    - kopieringstilldelningsoperatorn ska defaultas.
+    - flyttilldelningsoperatorn ska defaultas.
+
+    För övrigt finns olika varianter att få till operator+=, operator+ och
+    operator<<. Nedan beskrivs möjligheter (se de olika lösningsförslagen).
+
+    operatorT()
+    -----------
+    - typomvandlingsoperator för Adder till T kan införas, ska vara explicit.
+
+    operator+= för två Adder += Adder
+    ---------------------------------
+    - bör vara medlem.
+    - ska returnera Adder&.
+    - ska som medlem ha en parameter av typ const Adder&.
+    - ska som icke-medlem två parametrar av typ const Adder&.
+    - det är tillåtet att förutsätta att += och + finns för T.
+    - ska returnera *this.
+
+    operator+= för Adder += T
+    -------------------------
+    - bör vara medlem.
+    - ska returnera Adder&.
+    - ska som medlem ha en parameter av typ const T&.
+    - ska  som icke-medlem två parametrar av typ const Adder& respektive const T&.
+    - det är tillåtet att förutsätta att += och + finns för T.
+    - ska returnera *this.
+
+    operator+
+    ---------
+    - bör inte vara medlem.
+    - ska returnera Adder.
+    - ska som icke-medlem ha två parametrar av typ const Adder&.
+    - ska implementeras med operator+= för Adder.
+    - resultatet ska skapas i lokal variabel eller i temporärt objekt.
+
+    operator<<
+    ----------
+    - ska inte vara medlem.
+    - ska returnera ostream&.
+    - ska ha en första parameter av typ ostream&.
+    - ska ha en andra parameter av typ const Adder&.
+    - det är tillåtet att förutsätta att operator<< finns för T.
+
+------------------------------------------------------------------------------
+
+3.  print_pair
+    ----------
+    - funktionsmall med två malltypparametrar (T1 och T2)
+    - ska returnera void.
+    - ska ha en första parameter av typ ostream&.
+    - ska ha en andra parameter av typ 'const pair<T1, T2>&'.
+    - implementeras med operator<< för T1 respektive T2.
+
+    read_pair
+    ---------
+    - funktionsmall med två malltypparametrar (T1 och T2)
+    - ska returnera void.
+    - ska ha en första parameter av typ ostream&.
+    - ska ha en andra parameter av typ 'pair<T1, T2>&' (p).
+    - för 1 poäng får läsningen göras 'is >> p.first >> delimiter >> p.second',
+      där delimiter har typen char.
+    - för 3 poäng är det tillåtet att förutsätta att strängvärden som ska läsas
+      in inte innehåller vita tecken (det är en naturlig förutsättning för att 
+      uppgiften ska kunna lösas). 
+    - använda getline() och insträngström för att läsa och konvertera till rätt
+      typer för p.first och p.second.
+
+------------------------------------------------------------------------------

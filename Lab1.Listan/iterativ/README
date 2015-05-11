@@ -1,0 +1,24 @@
+TDDI14 Objektorienterad programmerling, laboration Listan
+------------------------------------------------------------------------
+Given koden för laboration Listan (iterativ).
+
+List.h        Inkluderingsfil för klassen List.
+
+List.cc       Implementeringsfil för klassen List.
+
+list-test.cc  Testprogram. Komplettera med fler tester vid behov.
+
+Makefile      Makefil för att kompilera testprogrammet och städa i
+              arbetskatalogen. Kommandon:
+
+              make       - kompilerar programmet
+
+              make clean - tar bort objektkodsfiler m.m.
+
+              make zap   - storstädar
+
+Se även kodeskelettet för implementering av List-iteratorer:
+
+../list-iteratorer.txt
+
+------------------------------------------------------------------------

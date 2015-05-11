@@ -1,0 +1,110 @@
+TDDI14 Objektorienterad programmering, 2014-08-21, Kommentarer
+------------------------------------------------------------------------------
+
+1. Inparametrar av typ std::string ska ha typen 'const string&'.
+
+   VC_Unit
+   -------
+   - Abstrakthet kräver minst en "pure virtual" funktion. Om ingen vanlig
+     medlemsfunktion för detta finns används destruktorn; det måste dock
+     finnas en separat definition.
+   - Måste ha en virtuell destruktor.
+   - konstruktor(er) som tar tillverkare och pris (valfritt, default 0.0)
+     bör vara protected för att framhäva abstraktheten; konstruktor som kan
+     anropas med ett argument bör vara explicit.
+   - Kopieringskonstruktorn ska "deletas".
+   - Kopieringstilldelningsoperatorn ska "deletas".
+   - get_manufacturer() ska returnera std::string, vara const, ej virtual.
+   - get_price() ska returnera double, vara const; ej virtual.
+   - set_price() ska inget returnera, ta double, tilldela medlemmen för pris.
+   - Datamedlem för tillverkare, ska vara private och const.
+   - Datamedlem för pris, ska vara private, ej const.
+
+   CA_Module
+   --------
+   - VC_Unit ska vara public basklass.
+   - Kompilatorgenererad destruktor är bra, "defaulta".
+   - Publik(a) konstruktor(er) som tar tillverkare, CA-system och pris (valfritt,
+     default 0.0); tillverkare och pris vidarebefordras till VC_Unit-konstruktor.
+   - Kopieringskonstruktorn ska "deletas".
+   - Kopieringstilldelningsoperatorn ska "deletas".
+   - get_ca_system() ska returnera std::string, vara const, ej virtual.
+   - Datamedlem för CA-system; ska vara private, ej const.
+
+   DTV_Box
+   ---------
+   - VC_Unit ska vara public basklass.
+   - Kompilatorgenererad destruktor är bra, "defaulta".
+   - Publik(a) konstruktor(er) som tar tillverkare, modell och pris (valfritt,
+     default 0.0); tillverkare och pris vidarebefordras till VC_Unit-konstruktor.
+   - Kopieringskonstruktorn ska "deletas".
+   - Kopieringstilldelningsoperatorn ska "deletas".
+   - get_model() ska returnera std::string, vara const, ej virtual.
+   - Datamedlem för modell; ska vara private, ej const.
+
+   DTV_Box_Recordable
+   ------------------
+   DTV_Box ska vara public basklass.
+   - Kompilatorgenererad destruktor är bra, "defaulta".
+   - Publik(a) konstruktor(er) som tar tillverkare, modell, diskstorlek och pris
+     (valfritt, default 0.0); tillverkare, modell och pris vidarebefordras till 
+     DTV_Box-konstruktor.
+   - Kopieringskonstruktorn ska "deletas".
+   - Kopieringstilldelningsoperatorn ska "deletas".
+   - get_size() ska returnera int, vara const, ej virtual.
+   - Datamedlem för diskstorlek; ska vara private, ej const.
+
+   Testprogram
+   -----------
+   Deklarera en variabel av varje av CA_Module, DTV_Box and DTV_Box_Recordable.
+   Anropa print() för varje variabel.
+
+   print()
+   -------
+   Använd typeid-uttryck för att identifiera typen hos objektet vc refererar
+   och dynamic_cast för att typomvandla 'vc', så att subklasspecifika medlems-	
+   funktioner kan anropas.
+   
+------------------------------------------------------------------------------
+
+2.  round_robin_error
+    -----------------
+    - härled från någon lämplig klass i exception-hierarkin, som kan ta ett
+      meddelande för att skriva ut med what(), t.ex. std::length_error.
+    - ska ha konstruktor som tar const std::string&.
+    - ska ha konstruktor som tar const char*.
+    - konstruktorerna bör vara explicit.
+
+    Round_Robin
+    -----------
+    - Ska vara klassmall med en typparameter (T) och en icke-typparameter (Max_Size).
+    - ska ha en vector<T> som privat medlem, för att lagra elementen i Round_Robin,
+      ska initialt vara tom,
+    - ska ha en vector<T>::iterator som privat medlem, för att hålla reda på
+      "aktuell position" i vectorn; måste deklareras med 'typename'; initieras
+      till iterator som erhålls genom vector::begin().
+    - inga speciella medlemsfunktioner utover eventuellt defaultkonstruktorn
+      behöver deklareras; kopieringskonstruktor, kopieringstilldelningsoperator,
+      flyttkonstruktor, flyttilldelningsoperatorn och destruktor kan defaultas
+      om man vill vara tydlig (bör man vara).
+    - empty() ska returnera bool (vector::empty()), ska vara const.
+    - add() ska ha parameter av typ const& T; ska lägga till värdet sist i vectorn
+      eller kasta round_robin_error om Round_Robin-objektet redan uppnått Max:Size;
+      anropa reset() för att återställa "aktuell position" till början av vectorn.
+    - reset() ska återställa "aktuell position" till början av vectorn.
+    - size() ska returnera vector::size().
+    - max_size() ska returnera Max_Size.
+    - operator* ska returnera T&, en referens till aktuellt element.
+    - operator++() ska returnera Round_Robin&, ska stega fram "aktuell position",
+      om inte Round_Robin-objektet är tomt, och sedan returnera icke-const 
+      referens till *this.
+    - operator++(int) ska returnera Round_Robin; ska ta en kopia av *this, 
+      anropa prefix ++ och sedan returnera kopian.
+
+    main()
+    ------
+    - ett try-block ska placeras runt alla satser i den första for-statsen
+    - en catch-hanterare (för exempelvis const exception& e) hängs på try-
+      blocket och e.what() skrivs ut på cout.
+
+------------------------------------------------------------------------------
