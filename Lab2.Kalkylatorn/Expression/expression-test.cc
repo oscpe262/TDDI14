@@ -3,8 +3,8 @@
  *
  * Program för att testa klassen Expression. Lägg till fler test!
  */
-#include "Expression.h"
 #include "Expression_Tree.h"
+#include "Expression.h"
 #include <iostream>
 #include <stdexcept>
 using namespace std;
@@ -21,7 +21,7 @@ int main()
    cout << "e1.get_postfix() = " << e1.get_postfix() << '\n';
    cout << boolalpha << "e1.empty() = " << e1.empty() << "\n\n";
 
-   Expression { e1 };  // Kopieringskonstruktor
+   Expression e2 { e1 };  // Kopieringskonstruktor
 
    try
    {
@@ -39,8 +39,8 @@ int main()
 
    // Nedanstående kräver implementering av Expression_Tree-klasserna.
 
-/*
-   Expression_Tree* t{ new Plus(new Integer(7), new Real(3.14) };
+
+   Expression_Tree* t{ new Plus(new Integer(7), new Real(3.14)) };
 
    Expression e3{ t };  // Konstruktor som tar ett länkat uttrycksträd
 
@@ -66,7 +66,6 @@ int main()
    }
    cout << "e4.get_postfix() = " << e4.get_postfix() << '\n';
    cout << "e4.empty() = " << e4.empty() << "\n\n";
-*/
 
    return 0;
 }

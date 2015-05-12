@@ -1,15 +1,16 @@
 /*
  * Calculator.cc
  */
-#include "Calculator.h"
+#include "Expression_Tree.h"
 #include "Expression.h"
+#include "Calculator.h"
 #include <cctype>
 #include <iostream>
 #include <stdexcept>
 #include <string>
 using namespace std;
 
-const string Calculator::valid_command_("?HUBPTS");
+const string Calculator::valid_command_("?HUBPTQ");
 
 /**
  * run() är huvudfunktionen för kalkylatorn. Skriver först ut hur man använder
@@ -35,7 +36,7 @@ run()
       }
       // Undantag som inte tillhör exception avbryter programkörningen!
    }
-   while (command_ != 'S');
+   while (command_ != 'Q');
 }
 
 /**
@@ -50,7 +51,7 @@ print_help() const
    cout << "  B     Beräkna aktuellt uttryck\n";
    cout << "  P     Visa aktuellt uttryck som postfix\n";
    cout << "  T     Visa aktuellt uttryck som träd\n";
-   cout << "  S     Avsluta kalkylatorn\n";
+   cout << "  Q     Avsluta kalkylatorn\n";
 }
 
 /**
@@ -103,7 +104,7 @@ execute_command()
       cout << current_expression_.get_postfix() << "\n";
    else if (command_ == 'T')
       current_expression_.print_tree(cout);
-   else if (command_ == 'S')
+   else if (command_ == 'Q')
       cout << "Kalkylatorn avlutas, välkommen åter!\n";
    else
       cout << "Detta ska inte hända!\n";

@@ -2,6 +2,7 @@
  * Expression_Tree.cc
  */
 #include "Expression_Tree.h"
+#include "Expression.h"
 #include <sstream>
 #include <iomanip>
 #include <math.h>

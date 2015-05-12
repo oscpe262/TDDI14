@@ -5,6 +5,8 @@
  * körs. Om ett undantag kastas av Calculator::run() fångas detta och 
  * programmet avslutas sedan efter att ett felmeddelande skrivits ut.
  */
+#include "Expression_Tree.h"
+#include "Expression.h"
 #include "Calculator.h"
 #include <iostream>
 using namespace std;

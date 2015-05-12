@@ -1,8 +1,8 @@
 /*
  * Expression.cc
  */
-#include "Expression.h"
 #include "Expression_Tree.h"
+#include "Expression.h"
 #include <algorithm>
 #include <cstdlib>
 #include <iostream>
@@ -16,7 +16,6 @@
 // ENBART TILLFÄLLIGT - TA BORT NEDANSTÅENDE INKLUDERING EFTER ATT 
 // EVALUATE() HAR IMPLEMENTERATS! (OM DEN INTE BEHÖVS AV NÅGOT SOM
 // LÄGGS TILL) OCH ÄVEN DENNA KOMMENTAR.
-#include <limits>
 using namespace std;
 
 // IMPLEMENTERA STUBBARNA NEDAN KORREKT. "ENRADARE" DEFINIERAS LÄMPLIGTVIS
@@ -27,7 +26,9 @@ using namespace std;
  */
 long double Expression::evaluate() const
 {
-   return numeric_limits<long double>::infinity();
+  if ( trunk_ == nullptr )
+    return 0;
+  return trunk_->evaluate();;
 }
 
 /*
@@ -35,7 +36,9 @@ long double Expression::evaluate() const
  */
 std::string Expression::get_postfix() const
 {
-   return string{};
+  if ( trunk_ == nullptr )
+    return string{};
+  return trunk_->get_postfix();
 }
 
 /*
@@ -43,28 +46,34 @@ std::string Expression::get_postfix() const
  */
 bool Expression::empty() const
 {
-   return false;
+  if (trunk_ == nullptr )
+    return true;
+  return false;
 }
 
 /*
  * print_tree()
  */
-void Expression::print_tree(std::ostream&) const
+void Expression::print_tree(std::ostream& os) const
 {
+  if ( trunk_ != nullptr )
+    trunk_->print(os);
 }
 
 /*
  * swap(other)
  */
-void Expression::swap(Expression&)
+void Expression::swap(Expression& rhs)
 {
+  std::swap(trunk_, rhs.trunk_);
 }
 
 /*
  * swap(x, y)
  */
-void swap(Expression&, Expression&)
+void swap(Expression& lhs, Expression& rhs)
 {
+  lhs.swap(rhs);
 }
 
 // make_expression() definieras efter namnrymden nedan.
