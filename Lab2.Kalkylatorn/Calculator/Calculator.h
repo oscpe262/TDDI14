@@ -20,18 +20,18 @@ public:
    void run();
 
 private:
-   static const std::string valid_command_;
+  static const std::string valid_command_;
 
-   Expression current_expression_;
+  Expression current_expression_;
 
-   char command_;
-
-   void print_help() const;
-   void get_command();
-   bool valid_command() const;
-   void execute_command();
-
-   void read_expression(std::istream&);
+  char command_;
+  
+  void print_help() const;
+  void get_command();
+  bool valid_command() const;
+  void execute_command();
+  
+  void read_expression(std::istream&);
 };
 
 #endif

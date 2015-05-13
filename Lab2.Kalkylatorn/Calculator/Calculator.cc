@@ -64,8 +64,9 @@ Calculator::
 get_command()
 {
    cout << ">> ";
+
    cin >> command_;
-   command_ = toupper(command_);
+   command_ = toupper(command_); 
 }
 
 /**
@@ -126,6 +127,7 @@ read_expression(istream& is)
    if (getline(is, infix))
    {
       current_expression_ = make_expression(infix);
+      
    }
    else
    {
