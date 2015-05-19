@@ -7,6 +7,7 @@
 #include <cctype>
 #include <iostream>
 #include <stdexcept>
+#include <sstream>
 #include <string>
 using namespace std;
 
@@ -28,7 +29,8 @@ run()
       try 
       {
 	 get_command();
-	 if (valid_command()) execute_command();
+	 if (valid_command())
+	   execute_command();
       }
       catch (const exception& e) 
       {
@@ -67,6 +69,28 @@ get_command()
 
    cin >> command_;
    command_ = toupper(command_); 
+
+   string temp;
+   getline ( cin, temp, '\n');
+   istringstream iss {temp};
+
+   if( iss >> c_arg_ >> ws && iss.eof()) // Argument och kommando funna
+     {
+       if (c_arg_ > ( exp_history_.size()+1 ) ) // Argument in range?
+	 {
+	   // THROW EXCEPTION
+	 }       
+       c_arg_ -= 1;
+     }
+   else if ( iss.eof() )
+     {
+       c_arg_ = 0; // Hittade ej argument, giltigt kommando, set c_arg_ to default  
+     }
+   else
+     {
+       // THROW EXCEPTION
+     }
+   
 }
 
 /**
@@ -96,19 +120,20 @@ Calculator::
 execute_command()
 {
    if (command_ == 'H' || command_ == '?')
-      print_help();
+     print_help();
    else if (command_ == 'U')
-      read_expression(cin);
-   else if (command_ == 'B')
-      cout << current_expression_.evaluate() << "\n";
+     read_expression(cin);
+   else if (command_ == 'B') {    
+     cout << exp_history_.at(c_arg_).evaluate() << "\n";
+   }
    else if (command_ == 'P')
-      cout << current_expression_.get_postfix() << "\n";
+     cout << exp_history_.at(c_arg_).get_postfix() << "\n";
    else if (command_ == 'T')
-      current_expression_.print_tree(cout);
-   else if (command_ == 'Q')
-      cout << "Kalkylatorn avlutas, välkommen åter!\n";
+     exp_history_.at(c_arg_).print_tree(cout);
+   else if (command_ == 'Q') 
+     cout << "Kalkylatorn avlutas, välkommen åter!\n";
    else
-      cout << "Detta ska inte hända!\n";
+     cout << "Detta ska inte hända!\n";
 }
 
 /**
@@ -127,7 +152,7 @@ read_expression(istream& is)
    if (getline(is, infix))
    {
       current_expression_ = make_expression(infix);
-      
+      exp_history_.push_front(current_expression_);
    }
    else
    {
