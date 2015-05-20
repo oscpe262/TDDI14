@@ -6,7 +6,7 @@
 #include <sstream>
 #include <iomanip>
 #include <math.h>
-
+#include <typeinfo>
 using namespace std;
 
 int const d_printlimit {4}; // Konstant för utskrift av doubles? 
@@ -112,12 +112,42 @@ double Variable::evaluate()
 
 std::string Binary_Operator::get_postfix()
 {
-  return (left_->get_postfix() + ' ' +  right_->get_postfix() + ' ' + str() );
+  return (left_->get_postfix()  + ' ' + str() + ' ' +  right_->get_postfix());
 }
 
 std::string Operand::get_postfix()
 {
   return str();
+}
+/* ======== GET_INFIX ========== */
+
+std::string Binary_Operator::get_infix()
+{
+  
+  std::string left { left_->get_infix() };
+  std::string right { right_->get_infix() };
+
+  Binary_Operator* bopl { dynamic_cast<Binary_Operator*>(left_) };
+  Binary_Operator* bopr { dynamic_cast<Binary_Operator*>(right_) };
+
+  
+  if ( bopl != nullptr )
+    left = '(' + left + ')';
+  if ( bopr != nullptr )
+    right = '(' + right + ')';
+  
+  return ( left + ' ' + str() + ' ' + right);  
+}
+
+std::string Operand::get_infix()
+{
+  return str();
+}
+
+std::string Assign::get_infix()
+{
+  return ( left_->get_infix() + ' ' + str() + ' ' + right_->get_infix() );
+  
 }
 
 /* ======== STR ========== */

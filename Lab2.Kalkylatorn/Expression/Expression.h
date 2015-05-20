@@ -50,6 +50,7 @@ public:
 
   long double evaluate() const;
   
+  std::string get_infix() const;
   std::string get_postfix() const;
   
   bool empty() const;

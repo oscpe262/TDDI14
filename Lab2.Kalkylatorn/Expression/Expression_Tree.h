@@ -7,7 +7,7 @@
 #include <string>
 #include <stdexcept>
 #include <iostream>
-
+#include <typeinfo>
 /*
  * expression_tree_error kastas om fel uppstår i en Expression_Tree-operation.
  * Ett diagnostiskt meddelande ska kunna skickas med.
@@ -27,8 +27,10 @@ public:
 
   
   virtual double           evaluate() = 0;
+  virtual std::string      get_infix() = 0;
   virtual std::string      get_postfix() = 0;
   virtual std::string      str() = 0;
+
   virtual void             print(std::ostream&, size_t depth = 1) = 0;
   virtual Expression_Tree* clone() = 0;
   
@@ -46,6 +48,7 @@ class Binary_Operator : public Expression_Tree
 public:
   ~Binary_Operator() {delete left_ ; delete right_ ;}
 
+  std::string get_infix() override;
   std::string get_postfix() override;
   void print(std::ostream&, size_t) override;
   
@@ -66,6 +69,7 @@ class Operand : public Expression_Tree
 public:
   ~Operand() = default;
 
+  std::string get_infix() override;
   std::string get_postfix() override;
   void print(std::ostream&, size_t) override;
   
@@ -92,6 +96,7 @@ public:
     : Binary_Operator{ left, right }
   {}
 
+  std::string get_infix() override;
   double evaluate() override;
   std::string str() override;
   Expression_Tree* clone() override;

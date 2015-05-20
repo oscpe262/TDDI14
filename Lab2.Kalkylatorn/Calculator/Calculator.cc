@@ -11,7 +11,7 @@
 #include <string>
 using namespace std;
 
-const string Calculator::valid_command_("?HUBPTQ");
+const string Calculator::valid_command_("?HUBPTQILNRA");
 
 /**
  * run() är huvudfunktionen för kalkylatorn. Skriver först ut hur man använder
@@ -51,8 +51,20 @@ print_help() const
    cout << "  H, ?  Skriv ut denna information\n";
    cout << "  U     Mata in ett nytt uttryck\n";
    cout << "  B     Beräkna aktuellt uttryck\n";
+   cout << "  B n   Beräkna uttryck n i historiken\n";
+   cout << "  I     Visa aktuellt uttryck som infix\n";
+   cout << "  I n   Visa uttryck n som infix\n";
+   cout << "  L     Lista alla uttryck som infix\n";
    cout << "  P     Visa aktuellt uttryck som postfix\n";
+   cout << "  P n   Via uttryck n som postfix\n";
    cout << "  T     Visa aktuellt uttryck som träd\n";
+   cout << "  T n   Visa uttryck n som träd\n";
+   cout << "  N     Visa antal lagrade uttryck\n";
+   cout << "  A     Gör uttryck n till aktuellt uttryck\n";
+   cout << "  R     Radera aktuellt uttryck\n";
+   cout << "  R n   Radera uttryck n\n";
+   cout << "  V     Lista alla variabler\n";
+   cout << "  X     Radera alla variabler\n";
    cout << "  Q     Avsluta kalkylatorn\n";
 }
 
@@ -123,13 +135,27 @@ execute_command()
      print_help();
    else if (command_ == 'U')
      read_expression(cin);
-   else if (command_ == 'B') {    
+   else if (command_ == 'B')     
      cout << exp_history_.at(c_arg_).evaluate() << "\n";
+   else if (command_ == 'I')
+     cout << exp_history_.at(c_arg_).get_infix() << "\n";
+   else if (command_ == 'L') {
+       int i {1};
+       for( Expression expr : exp_history_ )
+	 { cout << i++ << ": "<< expr.get_infix() << "\n"; }
    }
    else if (command_ == 'P')
      cout << exp_history_.at(c_arg_).get_postfix() << "\n";
    else if (command_ == 'T')
      exp_history_.at(c_arg_).print_tree(cout);
+   else if (command_ == 'N')
+     cout << exp_history_.size() << "\n";
+   else if (command_ == 'A') {
+     exp_history_.push_front (exp_history_.at(c_arg_));
+     exp_history_.erase (exp_history_.begin()+c_arg_+1); // Om vi vill ta bort det ur historiken
+   }
+   else if (command_ == 'R')
+     exp_history_.erase (exp_history_.begin()+c_arg_);
    else if (command_ == 'Q') 
      cout << "Kalkylatorn avlutas, välkommen åter!\n";
    else

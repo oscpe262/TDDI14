@@ -13,6 +13,7 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
+#include <typeinfo>
 // ENBART TILLFÄLLIGT - TA BORT NEDANSTÅENDE INKLUDERING EFTER ATT 
 // EVALUATE() HAR IMPLEMENTERATS! (OM DEN INTE BEHÖVS AV NÅGOT SOM
 // LÄGGS TILL) OCH ÄVEN DENNA KOMMENTAR.
@@ -30,6 +31,18 @@ long double Expression::evaluate() const
     return 0;
   return trunk_->evaluate();;
 }
+
+/*
+ * get_infix()
+ */
+std::string Expression::get_infix() const
+{
+  if ( typeid(*trunk_) == typeid(Assign) )
+    return dynamic_cast<Assign*>(trunk_)->get_infix();
+  else
+    return trunk_->get_infix();		       
+}
+
 
 /*
  * get_postfix()
