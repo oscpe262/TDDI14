@@ -3,13 +3,12 @@
  */
 #include "Expression_Tree.h"
 #include "Expression.h"
+#include "variable_table.h"
 #include <sstream>
 #include <iomanip>
 #include <math.h>
 #include <typeinfo>
 using namespace std;
-
-int const d_printlimit {4}; // Konstant för utskrift av doubles? 
 
 /* ======== CLONE ========== */
 
@@ -61,51 +60,63 @@ Expression_Tree* Variable::clone()
 
 /* ======== EVALUATE ========== */
 
-double Assign::evaluate()
+double Assign::evaluate( Variable_Table& v_table )
 {
-  double value { right_->evaluate() };
+  double value { right_->evaluate(v_table) };
   dynamic_cast<Variable*>(left_)->set_value( value ); // Casta till Variable-pekare för att komma åt Variable's särskilda set_value
-    return value;
+  
+  if ( v_table.find(left_->str()) ) {
+    v_table.set_value(left_->str(), value);
+  }
+  else {
+    v_table.insert(left_->str(), value);  
+  }
+
+  return value;
 }
 
-double Divide::evaluate()
+double Divide::evaluate( Variable_Table& v_table )
 {
-  return left_->evaluate() / right_->evaluate();
+  return left_->evaluate(v_table) / right_->evaluate(v_table);
 }
 
-double Minus::evaluate()
+double Minus::evaluate( Variable_Table& v_table )
 {
-  return left_->evaluate() - right_->evaluate();
+  return left_->evaluate(v_table) - right_->evaluate(v_table);
 }
 
-double Plus::evaluate()
+double Plus::evaluate( Variable_Table& v_table )
 {
-  return left_->evaluate() + right_->evaluate();
+  return left_->evaluate(v_table) + right_->evaluate(v_table);
 }
 
-double Power::evaluate()
+double Power::evaluate( Variable_Table& v_table )
 {
-  return pow( left_->evaluate(), right_->evaluate() );
+  return pow( left_->evaluate(v_table), right_->evaluate(v_table) );
 }
 
-double Times::evaluate()
+double Times::evaluate( Variable_Table& v_table )
 {
-  return left_->evaluate() * right_->evaluate();
+  return left_->evaluate(v_table) * right_->evaluate(v_table);
 }
 
-double Integer::evaluate()
+double Integer::evaluate( Variable_Table& v_table )
 {
   return static_cast<double>( value_ );
 }
 
-double Real::evaluate()
+double Real::evaluate( Variable_Table& v_table )
 {
   return value_;
 }
 
-double Variable::evaluate()
+double Variable::evaluate( Variable_Table& v_table )
 {
-  return value_;
+  if ( v_table.find(str()) ){
+    value_ = v_table.get_value(str());
+    return value_;
+  }
+  // throw ...
 }
 
 /* ======== GET_POSTFIX ========== */

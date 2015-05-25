@@ -7,6 +7,7 @@
  */
 #include "Expression_Tree.h"
 #include "Expression.h"
+#include "variable_table.h"
 #include "Calculator.h"
 #include <iostream>
 using namespace std;

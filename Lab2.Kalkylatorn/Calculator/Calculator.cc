@@ -1,6 +1,7 @@
 /*
  * Calculator.cc
  */
+#include "variable_table.h"
 #include "Expression_Tree.h"
 #include "Expression.h"
 #include "Calculator.h"
@@ -11,7 +12,7 @@
 #include <string>
 using namespace std;
 
-const string Calculator::valid_command_("?HUBPTQILNRA");
+const string Calculator::valid_command_("?HUBPTQILNRAVX");
 
 /**
  * run() är huvudfunktionen för kalkylatorn. Skriver först ut hur man använder
@@ -135,8 +136,10 @@ execute_command()
      print_help();
    else if (command_ == 'U')
      read_expression(cin);
-   else if (command_ == 'B')     
-     cout << exp_history_.at(c_arg_).evaluate() << "\n";
+   else if (command_ == 'B') {
+     double var_value {exp_history_.at(c_arg_).evaluate() };
+       cout << var_value << "\n";
+   }
    else if (command_ == 'I')
      cout << exp_history_.at(c_arg_).get_infix() << "\n";
    else if (command_ == 'L') {
@@ -156,6 +159,10 @@ execute_command()
    }
    else if (command_ == 'R')
      exp_history_.erase (exp_history_.begin()+c_arg_);
+   else if (command_ == 'V')
+     v_table_.list(cout);
+   else if (command_ == 'X')
+     v_table_.clear();
    else if (command_ == 'Q') 
      cout << "Kalkylatorn avlutas, välkommen åter!\n";
    else
@@ -177,7 +184,7 @@ read_expression(istream& is)
 
    if (getline(is, infix))
    {
-      current_expression_ = make_expression(infix);
+     current_expression_ = make_expression(&v_table_,infix);
       exp_history_.push_front(current_expression_);
    }
    else

@@ -19,7 +19,7 @@ LDFLAGS += -L/sw/gcc-${GCC4_V}/lib -static-libstdc++
 CPPFLAGS += -I$(EXPRESSION) -I$(VARIABLE_TABLE)
 
 # Objektkodsmoduler som ingår i den kompletta kalkylatorn.
-OBJECTS = kalkylator.o Calculator.o Expression.o Expression_Tree.o Variable_Table.o
+OBJECTS = kalkylator.o Calculator.o Expression.o Expression_Tree.o variable_table.o
 
 # Huvudmål - skapas med kommandot 'make' eller 'make kalkylator'.
 kalkylator: $(OBJECTS) Makefile
@@ -38,7 +38,7 @@ Expression.o: $(EXPRESSION)/Expression_Tree.h $(EXPRESSION)/Expression.h $(EXPRE
 Expression_Tree.o: $(EXPRESSION)/Expression_Tree.h $(EXPRESSION)/Expression_Tree.cc
 	$(CCC) $(CPPFLAGS) $(CCFLAGS) -c $(EXPRESSION)/Expression_Tree.cc
 
-Variable_Table.o: $(VARIABLE_TABLE)/variable_table.h $(VARIABLE_TABLE)/variable_table.cc
+variable_table.o: $(VARIABLE_TABLE)/variable_table.h $(VARIABLE_TABLE)/variable_table.cc
 	$(CCC) $(CPPFLAGS) $(CCFLAGS) -c $(VARIABLE_TABLE)/variable_table.cc
 
 

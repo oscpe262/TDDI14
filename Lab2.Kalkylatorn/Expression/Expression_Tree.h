@@ -3,6 +3,7 @@
  */
 #ifndef EXPRESSIONTREE_H
 #define EXPRESSIONTREE_H
+#include "variable_table.h"
 #include <iosfwd>
 #include <string>
 #include <stdexcept>
@@ -26,7 +27,7 @@ public:
   virtual ~Expression_Tree() = default;
 
   
-  virtual double           evaluate() = 0;
+  virtual double           evaluate( Variable_Table& v_table ) = 0;
   virtual std::string      get_infix() = 0;
   virtual std::string      get_postfix() = 0;
   virtual std::string      str() = 0;
@@ -97,7 +98,7 @@ public:
   {}
 
   std::string get_infix() override;
-  double evaluate() override;
+  double evaluate( Variable_Table& v_table) override;
   std::string str() override;
   Expression_Tree* clone() override;
 
@@ -119,7 +120,7 @@ public:
   Plus(Expression_Tree* left, Expression_Tree* right)
     : Binary_Operator{ left, right } {}
 
-  double evaluate() override;
+  double evaluate( Variable_Table& v_table ) override;
   std::string str() override;
   Expression_Tree* clone() override;
 
@@ -140,7 +141,7 @@ public:
     : Binary_Operator{ left, right }
   {}
 
-  double evaluate() override;
+  double evaluate( Variable_Table& v_table ) override;
   std::string str() override;
   Expression_Tree* clone() override;
 
@@ -166,7 +167,7 @@ public:
     : Binary_Operator{ left, right }
   {}
 
-  double evaluate() override;
+  double evaluate( Variable_Table& v_table ) override;
   std::string str() override;
   Expression_Tree* clone() override;
 
@@ -192,7 +193,7 @@ public:
     : Binary_Operator{ left, right }
   {}
 
-  double evaluate() override;
+  double evaluate( Variable_Table& v_table ) override;
   std::string str() override;
   Expression_Tree* clone() override;
 
@@ -218,7 +219,7 @@ public:
     : Binary_Operator{ left, right }
   {}
 
-  double evaluate() override;
+  double evaluate( Variable_Table& v_table ) override;
   std::string str() override;
   Expression_Tree* clone() override;
 
@@ -241,7 +242,7 @@ public:
   Integer( int value )
     : Operand{}, value_{ value } {}
 
-  double evaluate() override;
+  double evaluate( Variable_Table& v_table ) override;
   std::string str() override;
   Expression_Tree* clone() override;
 
@@ -262,7 +263,7 @@ public:
   Real( double value )
     : Operand{}, value_{ value } {}
 
-  double evaluate() override;
+  double evaluate(  Variable_Table& v_table ) override;
   std::string str() override;
   Expression_Tree* clone() override;
 
@@ -285,7 +286,7 @@ public:
     : Operand{}, name_{name}, value_{ }
   {}
 
-  double evaluate() override;
+  double evaluate( Variable_Table& v_table ) override;
   std::string str() override;
   Expression_Tree* clone() override;
   double get_value();

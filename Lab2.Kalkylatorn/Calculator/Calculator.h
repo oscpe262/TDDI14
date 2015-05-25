@@ -4,6 +4,7 @@
 #ifndef CALCULATOR_H
 #define CALCULATOR_H
 #include "Expression.h"
+#include "variable_table.h"
 #include <iosfwd>
 #include <deque>
 
@@ -14,7 +15,7 @@ class Calculator
 {
 public:
    Calculator()
-     : c_arg_{0} {};
+     : c_arg_{0}, current_expression_{Expression(&v_table_)} {}
 
    Calculator(const Calculator&) = delete;
    Calculator& operator=(const Calculator&) = delete;
@@ -24,9 +25,10 @@ public:
 private:
   static const std::string valid_command_;
 
-  Expression current_expression_;
 
   char command_;
+  Variable_Table v_table_;
+  Expression current_expression_;
   size_t c_arg_;
   std::deque<Expression> exp_history_ ;
   

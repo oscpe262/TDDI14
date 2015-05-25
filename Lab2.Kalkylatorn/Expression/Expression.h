@@ -13,11 +13,12 @@ public:
 
   ~Expression() { delete trunk_;}
   
-  explicit Expression( Expression_Tree* trunk = nullptr)
-    : trunk_{trunk} {}
+  
+  explicit Expression( Variable_Table* v_tablep, Expression_Tree* trunk = nullptr)
+    : trunk_{trunk}, ref_tablep_{v_tablep} {}
   
   Expression(const Expression& other)
-    : trunk_{nullptr}
+    : trunk_{nullptr}, ref_tablep_{other.ref_tablep_}
   {
     if (other.trunk_!=nullptr)
       trunk_ = other.trunk_->clone();
@@ -60,10 +61,11 @@ public:
 
 private:
   Expression_Tree* trunk_;
+  Variable_Table* ref_tablep_;
 };
 
 void swap(Expression&, Expression&);
 
-Expression make_expression(const std::string& infix);
+Expression make_expression(Variable_Table*, const std::string& infix);
 
 #endif

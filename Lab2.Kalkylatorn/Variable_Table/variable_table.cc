@@ -1,7 +1,7 @@
 /*
  * variable_table.cc
  */
-#include "Variable_Table.h"
+#include "variable_table.h"
 #include <sstream>
 #include <iostream>
 
@@ -9,7 +9,7 @@ using namespace std;
 
 void Variable_Table::insert(std::string v_name, double value)
 {
-  v_table_.insert(v_name, value);
+  v_table_.insert(std::pair<std::string, double>(v_name, value));
 }
 
 void Variable_Table::remove(std::string v_name)
@@ -27,7 +27,7 @@ void Variable_Table::set_value(std::string v_name, double value)
   v_table_.at(v_name) = value;
 }
 
-std::string Variable_Table::get_value(std::string v_name) const
+double Variable_Table::get_value(std::string v_name) const
 {
   return v_table_.at(v_name);
 }
@@ -38,7 +38,7 @@ void Variable_Table::list( std::ostream& os) const
     {
       os << it->first << ": " << it->second << "\n";
     }
-
+}
 void Variable_Table::clear()
 {
   v_table_.clear();

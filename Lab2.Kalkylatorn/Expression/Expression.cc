@@ -1,6 +1,7 @@
 /*
  * Expression.cc
  */
+#include "variable_table.h"
 #include "Expression_Tree.h"
 #include "Expression.h"
 #include <algorithm>
@@ -29,7 +30,7 @@ long double Expression::evaluate() const
 {
   if ( trunk_ == nullptr )
     return 0;
-  return trunk_->evaluate();;
+  return trunk_->evaluate(*ref_tablep_);;
 }
 
 /*
@@ -421,7 +422,7 @@ namespace
 /*
  * make_expression()
  */
-Expression make_expression(const string& infix)
+Expression make_expression(Variable_Table* vtablep, const string& infix)
 {
-   return Expression(make_expression_tree(make_postfix(infix)));
+  return Expression(vtablep, make_expression_tree(make_postfix(infix)));
 }
