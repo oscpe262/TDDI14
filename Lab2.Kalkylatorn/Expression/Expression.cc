@@ -15,14 +15,6 @@
 #include <string>
 #include <vector>
 #include <typeinfo>
-// ENBART TILLFÄLLIGT - TA BORT NEDANSTÅENDE INKLUDERING EFTER ATT 
-// EVALUATE() HAR IMPLEMENTERATS! (OM DEN INTE BEHÖVS AV NÅGOT SOM
-// LÄGGS TILL) OCH ÄVEN DENNA KOMMENTAR.
-using namespace std;
-
-// IMPLEMENTERA STUBBARNA NEDAN KORREKT. "ENRADARE" DEFINIERAS LÄMPLIGTVIS
-// I KLASSEN. TA BORT DENNA KOMMENTAR.
-
 /*
  * evaluate()
  */
@@ -51,7 +43,7 @@ std::string Expression::get_infix() const
 std::string Expression::get_postfix() const
 {
   if ( trunk_ == nullptr )
-    return string{};
+    return std::string{};
   return trunk_->get_postfix();
 }
 
@@ -91,7 +83,7 @@ void swap(Expression& lhs, Expression& rhs)
 }
 
 // make_expression() definieras efter namnrymden nedan.
-Expression make_expression(const string& infix);
+Expression make_expression(const std::string& infix);
 
 // Namrymden nedan innehåller intern kod för infix-till-postfix-omvandling
 // och generering av uttrycksträd. En anonym namnrymd begränsar användningen

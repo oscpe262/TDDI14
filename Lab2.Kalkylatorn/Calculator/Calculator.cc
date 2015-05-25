@@ -42,7 +42,7 @@ run()
    while (command_ != 'Q');
 }
 
-/**
+/*
  * print_help() skriver ut kommandorepertoaren.
  */
 void
@@ -69,7 +69,7 @@ print_help() const
    cout << "  Q     Avsluta kalkylatorn\n";
 }
 
-/**
+/*
  * get_command() läser ett kommando (ett tecken), gör om till versal och lagrar
  * kommandot i medlemmen command_ för vidare behandling av andra operationer. 
  * Ingen kontroll görs om det skrivits mer, i så fall skräp, på kommandoraden.
@@ -106,7 +106,7 @@ get_command()
    
 }
 
-/**
+/*
  * valid_command() kontrollerar om kommandot som finns i medlemmen command_
  * tillhör den tillåtna kommandorepertoraren och returnerar antingen true
  * (giltigt kommando) eller false (ogiltigt kommando).
@@ -136,16 +136,14 @@ execute_command()
      print_help();
    else if (command_ == 'U')
      read_expression(cin);
-   else if (command_ == 'B') {
-     double var_value {exp_history_.at(c_arg_).evaluate() };
-       cout << var_value << "\n";
-   }
+   else if (command_ == 'B') 
+     cout << exp_history_.at(c_arg_).evaluate() << "\n";
    else if (command_ == 'I')
      cout << exp_history_.at(c_arg_).get_infix() << "\n";
    else if (command_ == 'L') {
-       int i {1};
-       for( Expression expr : exp_history_ )
-	 { cout << i++ << ": "<< expr.get_infix() << "\n"; }
+     int i {1};
+     for( Expression expr : exp_history_ )
+       { cout << i++ << ": "<< expr.get_infix() << "\n"; }
    }
    else if (command_ == 'P')
      cout << exp_history_.at(c_arg_).get_postfix() << "\n";

@@ -26,6 +26,8 @@ public:
 
   virtual ~Expression_Tree() = default;
 
+  // Expression_Tree ( const Expression_Tree &) = delete;
+  // Expression_Tree ( const Expression_Tree &) = delete;
   
   virtual double           evaluate( Variable_Table& v_table ) = 0;
   virtual std::string      get_infix() = 0;
@@ -40,15 +42,13 @@ protected:
 
 };
 
-/* SKELETT FÖR DE DIREKTA SUBKLASSERNA. INFÖR DATAMEDLEMMAR, OM  DET ÄR LÄMPLIGT (DVS DE SKA FINNAS I ALLA SUBKLASSER), OCH ÄVEN
- * FUNKTIONALITET FÖR SÅDANA DATAMEDLEMMAR, OM DET ÄR MÖJLIGT OCH FUNKTIONERNA KAN ÄRVAS AV SUBKASSERNA. VÄLJ LÄMPLIG ÅTKOMST-
- * SPECIFIKATION (public, protected, private) FÖR DE MEDLEMMAR DU INFÖR. */
-
 class Binary_Operator : public Expression_Tree
 {
 public:
   ~Binary_Operator() {delete left_ ; delete right_ ;}
 
+  // kop kon/till = del?
+  
   std::string get_infix() override;
   std::string get_postfix() override;
   void print(std::ostream&, size_t) override;
@@ -81,21 +81,14 @@ private:
 };
 
 
- /* SKELETT FÖR DE KONKRETA KLASSERNA. INFÖR EVENTUELLA DATAMEDLEMMAR SOM BEHÖVER LÄGGAS TILL FÖR VARJE SPECIFIK KLASS OCH ÖVERSKUGGA
- * VIRTUELLA FUNKTIONER SOM ÄNNU EJ ÖVERSKUGGATS. VÄLJ LÄMPLIG ÅTKOMSTSPECIFIKATION (public, protected, private) FÖR DE MEDLEMMAR 
- * DU INFÖR. */
-
-
 class Assign : public Binary_Operator
 { 
 public:
 
   ~Assign() = default;
 
-  Assign(Expression_Tree* left,
-	 Expression_Tree* right)
-    : Binary_Operator{ left, right }
-  {}
+  Assign(Expression_Tree* left, Expression_Tree* right)
+    : Binary_Operator{ left, right } {}
 
   std::string get_infix() override;
   double evaluate( Variable_Table& v_table) override;

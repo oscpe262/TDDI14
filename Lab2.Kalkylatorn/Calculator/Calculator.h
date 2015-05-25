@@ -8,7 +8,7 @@
 #include <iosfwd>
 #include <deque>
 
-/**
+/*
  * Calculator är en klass för hantering av enkla aritmetiska uttryck.
  */
 class Calculator
