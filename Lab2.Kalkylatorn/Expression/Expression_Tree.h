@@ -277,7 +277,6 @@ protected:
 
 private:
   std::string name_;
-//  double value_;
 
 };
 
