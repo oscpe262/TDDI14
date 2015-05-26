@@ -63,7 +63,6 @@ Expression_Tree* Variable::clone()
 double Assign::evaluate( Variable_Table& v_table )
 {
   double value { right_->evaluate(v_table) };
-  dynamic_cast<Variable*>(left_)->set_value( value ); // Casta till Variable-pekare för att komma åt Variable's särskilda set_value
   
   if ( v_table.find(left_->str()) ) {
     v_table.set_value(left_->str(), value);
@@ -77,7 +76,10 @@ double Assign::evaluate( Variable_Table& v_table )
 
 double Divide::evaluate( Variable_Table& v_table )
 {
-  return left_->evaluate(v_table) / right_->evaluate(v_table);
+  double right =  right_->evaluate(v_table);
+  if (right == 0)
+    throw exptree_error{"Du skola icke dela med 0!\n"};
+  return left_->evaluate(v_table) / right;
 }
 
 double Minus::evaluate( Variable_Table& v_table )
@@ -92,7 +94,11 @@ double Plus::evaluate( Variable_Table& v_table )
 
 double Power::evaluate( Variable_Table& v_table )
 {
-  return pow( left_->evaluate(v_table), right_->evaluate(v_table) );
+  
+  double left ( left_->evaluate(v_table));
+  double right (right_->evaluate(v_table) );
+  if (left == 0 && right == 0)
+    throw exptree_error("Ej definierat!\n");
 }
 
 double Times::evaluate( Variable_Table& v_table )
@@ -112,27 +118,27 @@ double Real::evaluate( Variable_Table& v_table )
 
 double Variable::evaluate( Variable_Table& v_table )
 {
-  if ( v_table.find(str()) ){
-    value_ = v_table.get_value(str());
-    return value_;
-  }
-  // throw ...
+  if ( !(v_table.find(str())) )
+    throw exptree_error("misslyckades att evaluera en variabel\n");
+  return v_table.get_value(str());
+  //    return value_;
+  
 }
 
 /* ======== GET_POSTFIX ========== */
 
-std::string Binary_Operator::get_postfix()
+std::string Binary_Operator::get_postfix() const
 {
   return (left_->get_postfix()  + ' ' + str() + ' ' +  right_->get_postfix());
 }
 
-std::string Operand::get_postfix()
+std::string Operand::get_postfix() const
 {
   return str();
 }
 /* ======== GET_INFIX ========== */
 
-std::string Binary_Operator::get_infix()
+std::string Binary_Operator::get_infix() const 
 {
   
   std::string left { left_->get_infix() };
@@ -150,12 +156,12 @@ std::string Binary_Operator::get_infix()
   return ( left + ' ' + str() + ' ' + right);  
 }
 
-std::string Operand::get_infix()
+std::string Operand::get_infix() const 
 {
   return str();
 }
 
-std::string Assign::get_infix()
+std::string Assign::get_infix() const
 {
   return ( left_->get_infix() + ' ' + str() + ' ' + right_->get_infix() );
   
@@ -163,68 +169,57 @@ std::string Assign::get_infix()
 
 /* ======== STR ========== */
 
-string Assign::str()
+string Assign::str() const
 {
   return "=";
 }
 
-string Divide::str()
+string Divide::str() const
 {
   return "/";
 }
 
-string Minus::str()
+string Minus::str() const
 {
   return "-";
 }
 
-string Plus::str()
+string Plus::str() const
 {
   return "+";
 }
 
-string Power::str()
+string Power::str() const
 {
   return "^";
 }
 
-string Times::str()
+string Times::str() const
 {
   return "*";
 }
 
-string Integer::str()
+string Integer::str() const
 {
   return to_string( value_ );
 }
 
-string Real::str()
+string Real::str() const
 {
   stringstream ss;
   ss << setprecision(15) << value_;
   return ss.str();
 }
 
-string Variable::str()
+string Variable::str() const
 {
   return name_;
 }
 
 
-double Variable::get_value()
-{
-  return value_;
-}
-
-void Variable::set_value( double value )
-{
-  value_ = value;
-}
-
-
 /* ======== HELP FUNCS ========== */
 
-void Binary_Operator::print(ostream& os, size_t depth = 1)
+void Binary_Operator::print(ostream& os, size_t depth = 1) const
 {
   right_->print( os, depth+1 );
 
@@ -238,7 +233,7 @@ void Binary_Operator::print(ostream& os, size_t depth = 1)
   left_->print( os, depth+1 );
 }
 
-void Operand::print(ostream& os, size_t depth = 1)
+void Operand::print(ostream& os, size_t depth = 1) const
 {
   os << setw( 2 * depth ) << ' '
      << str() << endl;

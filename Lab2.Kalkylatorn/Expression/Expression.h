@@ -7,6 +7,15 @@
 #include <stdexcept>
 #include <string>
 
+class expression_error : public std::logic_error
+{
+public:
+  explicit expression_error( const std::string& what_arg )
+    : std::logic_error(what_arg) {}
+  explicit expression_error( const char* what_arg )
+    : std::logic_error(what_arg) {}
+};
+
 class Expression
 {
 public:
@@ -20,8 +29,8 @@ public:
   Expression(const Expression& other)
     : trunk_{nullptr}, ref_tablep_{other.ref_tablep_}
   {
-    if (other.trunk_!=nullptr)
-      trunk_ = other.trunk_->clone();
+	if (other.trunk_!=nullptr)
+	  trunk_ = other.trunk_->clone();
   }
   
   Expression(Expression&& other){swap(other);}

@@ -7,27 +7,27 @@
 
 using namespace std;
 
-void Variable_Table::insert(std::string v_name, double value)
+void Variable_Table::insert(const std::string& v_name, double value)
 {
   v_table_.insert(std::pair<std::string, double>(v_name, value));
 }
 
-void Variable_Table::remove(std::string v_name)
+void Variable_Table::remove(const std::string& v_name)
 {
   v_table_.erase(v_name);
 }
 
-bool Variable_Table::find(std::string v_name) const
+bool Variable_Table::find(const std::string& v_name) const
 {
   return v_table_.find(v_name) != v_table_.end();
 }
 
-void Variable_Table::set_value(std::string v_name, double value)
+void Variable_Table::set_value(const std::string& v_name, double value)
 {
   v_table_.at(v_name) = value;
 }
 
-double Variable_Table::get_value(std::string v_name) const
+double Variable_Table::get_value(const std::string& v_name) const
 {
   return v_table_.at(v_name);
 }

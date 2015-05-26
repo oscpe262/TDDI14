@@ -23,13 +23,13 @@ public:
    void run();
 
 private:
-  static const std::string valid_command_;
+  size_t c_arg_;
 
+  static const std::string valid_command_;
 
   char command_;
   Variable_Table v_table_;
   Expression current_expression_;
-  size_t c_arg_;
   std::deque<Expression> exp_history_ ;
   
   void print_help() const;

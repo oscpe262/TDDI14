@@ -9,11 +9,15 @@
 #include <stdexcept>
 #include <iostream>
 #include <typeinfo>
-/*
- * expression_tree_error kastas om fel uppstår i en Expression_Tree-operation.
- * Ett diagnostiskt meddelande ska kunna skickas med.
- */
-// ATT GÖRA!
+
+class exptree_error : public std::logic_error
+{
+public:
+  explicit exptree_error( const std::string& what_arg )
+    : std::logic_error(what_arg) {}
+  explicit exptree_error( const char* what_arg )
+    : std::logic_error(what_arg) {}
+};
 
 /*
  * Expression_Tree är en abstrakt, polymorf basklass för alla trädnodklasser.
@@ -21,65 +25,72 @@
 class Expression_Tree
 {
 public:
-   // VIKTIGA SAKER KVAR ATT TÄNKA PÅ! TILL EXEMPEL INITIERING, KOPIERING
-   // OCH DESTRUERING! DET KAN ÄVEN TÄNKAS ATT VIKTIGA MODIFIERINGAR BEHÖVS.
 
   virtual ~Expression_Tree() = default;
-
-  // Expression_Tree ( const Expression_Tree &) = delete;
-  // Expression_Tree ( const Expression_Tree &) = delete;
   
   virtual double           evaluate( Variable_Table& v_table ) = 0;
-  virtual std::string      get_infix() = 0;
-  virtual std::string      get_postfix() = 0;
-  virtual std::string      str() = 0;
+  virtual std::string      get_infix() const = 0;
+  virtual std::string      get_postfix() const = 0;
+  virtual std::string      str() const = 0;
 
-  virtual void             print(std::ostream&, size_t depth = 1) = 0;
+  virtual void             print(std::ostream&, size_t depth = 1) const = 0;
   virtual Expression_Tree* clone() = 0;
   
 protected:
   Expression_Tree() = default;
 
 };
-
+/*
+###################### B I N A R Y  O P E R A T O R #############################
+ */
 class Binary_Operator : public Expression_Tree
 {
 public:
   ~Binary_Operator() {delete left_ ; delete right_ ;}
-
-  // kop kon/till = del?
   
-  std::string get_infix() override;
-  std::string get_postfix() override;
-  void print(std::ostream&, size_t) override;
+  std::string get_infix() const override;
+  std::string get_postfix() const override;
+  void print(std::ostream&, size_t) const override;
   
 protected:
   Binary_Operator(Expression_Tree* left, Expression_Tree* right)
     : Expression_Tree(), left_{ left }, right_{ right } {}
-
+  Binary_Operator( const Binary_Operator& other )
+    : Expression_Tree()
+  {
+    left_ = other.left_->clone();
+    try
+      {
+	right_ = other.right_->clone();
+      }
+    catch(...)
+      {
+	delete left_;
+	throw;
+      }
+  }
   Expression_Tree* left_;
   Expression_Tree* right_;
 
-private:	
 };
 
-/*========*/
+/*##################### O P E R A N D ##################################=*/
 
 class Operand : public Expression_Tree
 {
 public:
   ~Operand() = default;
 
-  std::string get_infix() override;
-  std::string get_postfix() override;
-  void print(std::ostream&, size_t) override;
+  std::string get_infix() const override;
+  std::string get_postfix() const override;
+  void print(std::ostream&, size_t) const override;
   
 protected:
   Operand() : Expression_Tree() {}
 
-private:
 };
 
+//############################ A S S I G N ###############################
 
 class Assign : public Binary_Operator
 { 
@@ -87,22 +98,20 @@ public:
 
   ~Assign() = default;
 
-  Assign(Expression_Tree* left, Expression_Tree* right)
-    : Binary_Operator{ left, right } {}
+  Assign(Expression_Tree* left, Expression_Tree* right) : Binary_Operator{ left, right } {}
 
-  std::string get_infix() override;
+  std::string get_infix() const override;
   double evaluate( Variable_Table& v_table) override;
-  std::string str() override;
+  std::string str() const override;
   Expression_Tree* clone() override;
 
 protected:
 
-  Assign( const Assign& other )
-    : Binary_Operator{ other.left_->clone(), other.right_->clone() } {}
+  Assign( const Assign& other ) : Binary_Operator{ other.left_->clone(), other.right_->clone() } {}
 
-private:
-  
 };
+
+//############################ P L U S ##################################
 
 class Plus : public Binary_Operator
 { 
@@ -110,18 +119,18 @@ public:
 
   ~Plus() = default;
   
-  Plus(Expression_Tree* left, Expression_Tree* right)
-    : Binary_Operator{ left, right } {}
+  Plus(Expression_Tree* left, Expression_Tree* right) : Binary_Operator{ left, right } {}
 
   double evaluate( Variable_Table& v_table ) override;
-  std::string str() override;
+  std::string str() const override;
   Expression_Tree* clone() override;
 
 protected:
-  Plus( const Plus& other )
-    : Binary_Operator{ other.left_->clone(),  other.right_->clone() } {}
+  Plus( const Plus& other ): Binary_Operator{ other.left_->clone(),  other.right_->clone() } {}
   
 };
+
+// ############################# M I N U S ############################
 
 class Minus : public Binary_Operator
 {
@@ -129,25 +138,19 @@ public:
 
   ~Minus() = default;
 
-  Minus(Expression_Tree* left,
-	Expression_Tree* right)
-    : Binary_Operator{ left, right }
-  {}
+  Minus(Expression_Tree* left, Expression_Tree* right) : Binary_Operator{ left, right } {}
 
   double evaluate( Variable_Table& v_table ) override;
-  std::string str() override;
+  std::string str() const override;
   Expression_Tree* clone() override;
 
 protected:
 
-  Minus( const Minus& other )
-    : Binary_Operator{ other.left_->clone(), other.right_->clone() }
-  {}
-
-private:
+  Minus( const Minus& other ) : Binary_Operator{ other } {}
 
 };
 
+//############################# T I M E S ############################
 
 class Times : public Binary_Operator
 {
@@ -155,24 +158,19 @@ public:
 
   ~Times() = default;
 
-  Times(Expression_Tree* left,
-	Expression_Tree* right)
-    : Binary_Operator{ left, right }
-  {}
+  Times(Expression_Tree* left, Expression_Tree* right) : Binary_Operator{ left, right } {}
 
   double evaluate( Variable_Table& v_table ) override;
-  std::string str() override;
+  std::string str() const override;
   Expression_Tree* clone() override;
 
 protected:
 
-  Times( const Times& other )
-    : Binary_Operator{ other.left_->clone(), other.right_->clone() }
-  {}
-
-private:
+  Times( const Times& other ) : Binary_Operator{ other } {}
 
 };
+
+//######################### D I V I D E ##############################
 
 class Divide : public Binary_Operator
 {
@@ -181,24 +179,19 @@ public:
 
   ~Divide() = default;
 
-  Divide(Expression_Tree* left,
-	 Expression_Tree* right)
-    : Binary_Operator{ left, right }
-  {}
+  Divide(Expression_Tree* left, Expression_Tree* right) : Binary_Operator{ left, right } {}
 
   double evaluate( Variable_Table& v_table ) override;
-  std::string str() override;
+  std::string str() const override;
   Expression_Tree* clone() override;
 
 protected:
 
-  Divide( const Divide& other )
-    : Binary_Operator{ other.left_->clone(), other.right_->clone() }
-  {}
-
-private:
+  Divide( const Divide& other ) : Binary_Operator{ other } {}
 
 };
+
+//########################## P O W E R ##############################
 
 class Power: public Binary_Operator
 {
@@ -207,24 +200,19 @@ public:
 
   ~Power() = default;
 
-  Power(Expression_Tree* left,
-	Expression_Tree* right)
-    : Binary_Operator{ left, right }
-  {}
+  Power(Expression_Tree* left, Expression_Tree* right) : Binary_Operator{ left, right } {}
 
   double evaluate( Variable_Table& v_table ) override;
-  std::string str() override;
+  std::string str() const override;
   Expression_Tree* clone() override;
 
 protected:
 
-  Power( const Power& other )
-    : Binary_Operator{ other.left_->clone(), other.right_->clone() }
-  {}
+  Power( const Power& other ) : Binary_Operator{ other } {}
 
-private:
 };
 
+//######################### I N T E G E R ###########################
 
 class Integer : public Operand
 {
@@ -232,11 +220,10 @@ public:
 
   ~Integer() = default;
   
-  Integer( int value )
-    : Operand{}, value_{ value } {}
+  Integer( int value ) : Operand{}, value_{ value } {}
 
   double evaluate( Variable_Table& v_table ) override;
-  std::string str() override;
+  std::string str() const override;
   Expression_Tree* clone() override;
 
 protected:
@@ -247,17 +234,18 @@ private:
   int value_;
 };
 
+//########################  R E A L  ###############################
+
 class Real : public Operand
 {
 public:
 
   ~Real() = default;
   
-  Real( double value )
-    : Operand{}, value_{ value } {}
+  Real( double value ) : Operand{}, value_{ value } {}
 
   double evaluate(  Variable_Table& v_table ) override;
-  std::string str() override;
+  std::string str() const override;
   Expression_Tree* clone() override;
 
 protected:
@@ -268,6 +256,8 @@ private:
   
 };
 
+//####################### V A R I A B L E ##########################
+
 class Variable : public Operand
 {
 
@@ -275,15 +265,11 @@ public:
 
   ~Variable() = default;
 
-  Variable( const std::string& name )
-    : Operand{}, name_{name}, value_{ }
-  {}
+Variable( const std::string& name ) : Operand{}, name_{name}{}//, value_{ } {}
 
   double evaluate( Variable_Table& v_table ) override;
-  std::string str() override;
+  std::string str() const override;
   Expression_Tree* clone() override;
-  double get_value();
-  void set_value( double );
 
 protected:
 
@@ -291,7 +277,7 @@ protected:
 
 private:
   std::string name_;
-  double value_;
+//  double value_;
 
 };
 

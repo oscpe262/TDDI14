@@ -91,7 +91,7 @@ get_command()
      {
        if (c_arg_ > ( exp_history_.size()+1 ) ) // Argument in range?
 	 {
-	   // THROW EXCEPTION
+	   throw invalid_argument("argument utanför giltigt intervall\n");
 	 }       
        c_arg_ -= 1;
      }
@@ -101,7 +101,7 @@ get_command()
      }
    else
      {
-       // THROW EXCEPTION
+	   throw invalid_argument("ogiltigt argument\n");       
      }
    
 }
@@ -183,7 +183,7 @@ read_expression(istream& is)
    if (getline(is, infix))
    {
      current_expression_ = make_expression(&v_table_,infix);
-      exp_history_.push_front(current_expression_);
+     exp_history_.push_front(current_expression_);
    }
    else
    {

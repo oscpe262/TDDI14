@@ -17,11 +17,11 @@ public:
   Variable_Table& operator=( const Variable_Table&) = delete;
   
   
-  void insert(std::string, double);
-  void remove(std::string);
-  bool find(std::string) const;
-  void set_value(std::string, double);
-  double get_value(std::string) const;
+  void insert(const std::string&, double);
+  void remove(const std::string&);
+  bool find(const std::string&) const;
+  void set_value(const std::string&, double);
+  double get_value(const std::string&) const;
   void list( std::ostream& ) const;
   void clear();
   bool empty() const;
