@@ -1,3 +1,0 @@
-#!/bin/bash
-reset &&
-g++ -std=c++11 -L/sw/dcc-${GCC4_V}/lib -static-libstdc++ -pedantic -Wall -Wextra expression-test.cc Expression_Tree.cc Expression.cc
