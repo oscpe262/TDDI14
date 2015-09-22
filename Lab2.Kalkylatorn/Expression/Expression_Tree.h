@@ -100,7 +100,6 @@ public:
 
   Assign(Expression_Tree* left, Expression_Tree* right) : Binary_Operator{ left, right } {}
 
-  std::string get_infix() const override;
   double evaluate( Variable_Table& v_table) override;
   std::string str() const override;
   Expression_Tree* clone() override;

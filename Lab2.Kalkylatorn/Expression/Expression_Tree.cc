@@ -144,14 +144,17 @@ std::string Binary_Operator::get_infix() const
   std::string left { left_->get_infix() };
   std::string right { right_->get_infix() };
 
-  Binary_Operator* bopl { dynamic_cast<Binary_Operator*>(left_) };
-  Binary_Operator* bopr { dynamic_cast<Binary_Operator*>(right_) };
+  if (typeid(*this) != typeid(Assign))
+    {
+      Binary_Operator* bopl { dynamic_cast<Binary_Operator*>(left_) };
+      Binary_Operator* bopr { dynamic_cast<Binary_Operator*>(right_) };
 
   
-  if ( bopl != nullptr )
-    left = '(' + left + ')';
-  if ( bopr != nullptr )
-    right = '(' + right + ')';
+      if ( bopl != nullptr )
+	left = '(' + left + ')';
+      if ( bopr != nullptr )
+	right = '(' + right + ')';
+    }
   
   return ( left + ' ' + str() + ' ' + right);  
 }
@@ -159,12 +162,6 @@ std::string Binary_Operator::get_infix() const
 std::string Operand::get_infix() const 
 {
   return str();
-}
-
-std::string Assign::get_infix() const
-{
-  return ( left_->get_infix() + ' ' + str() + ' ' + right_->get_infix() );
-  
 }
 
 /* ======== STR ========== */

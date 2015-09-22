@@ -66,7 +66,7 @@ public:
   bool empty() const;
   void print_tree(std::ostream&) const;
   
-  void swap(Expression&);
+  void swap(Expression&) noexcept;
 
 private:
   Expression_Tree* trunk_;

@@ -22,7 +22,8 @@ long double Expression::evaluate() const
 {
   if ( trunk_ == nullptr )
     throw expression_error("giltigt uttryck saknas\n");
-  return trunk_->evaluate(*ref_tablep_);
+  else
+    return trunk_->evaluate(*ref_tablep_);
 }
 
 /*
@@ -30,6 +31,9 @@ long double Expression::evaluate() const
  */
 std::string Expression::get_infix() const
 {
+  if ( trunk_ == nullptr )
+    throw expression_error("giltigt uttryck saknas\n");
+  else
     return trunk_->get_infix();		       
 }
 
@@ -41,7 +45,8 @@ std::string Expression::get_postfix() const
 {
   if ( trunk_ == nullptr )
     return std::string{};
-  return trunk_->get_postfix();
+  else
+    return trunk_->get_postfix();
 }
 
 /*
@@ -49,9 +54,7 @@ std::string Expression::get_postfix() const
  */
 bool Expression::empty() const
 {
-  if (trunk_ == nullptr )
-    return true;
-  return false;
+  return trunk_ == nullptr;
 }
 
 /*
@@ -59,14 +62,16 @@ bool Expression::empty() const
  */
 void Expression::print_tree(std::ostream& os) const
 {
-  if ( trunk_ != nullptr )
+  if ( trunk_ == nullptr )
+    throw expression_error("giltigt uttryck saknas\n");
+  else
     trunk_->print(os);
 }
 
 /*
  * swap(other)
  */
-void Expression::swap(Expression& rhs)
+void Expression::swap(Expression& rhs) noexcept
 {
   std::swap(trunk_, rhs.trunk_);
 }
@@ -74,7 +79,7 @@ void Expression::swap(Expression& rhs)
 /*
  * swap(x, y)
  */
-void swap(Expression& lhs, Expression& rhs)
+void swap(Expression& lhs, Expression& rhs) noexcept
 {
   lhs.swap(rhs);
 }

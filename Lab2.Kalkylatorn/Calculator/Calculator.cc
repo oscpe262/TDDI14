@@ -2,7 +2,6 @@
  * Calculator.cc
  */
 #include "variable_table.h"
-#include "Expression_Tree.h"
 #include "Expression.h"
 #include "Calculator.h"
 #include <cctype>
